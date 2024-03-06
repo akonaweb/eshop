@@ -9,7 +9,7 @@ namespace Eshop.WebApi.Controllers
     {
         private static List<Product> Products = new List<Product>
         {
-            new Product(1, "Notebook Acer 15", "Best notebook out there", 399.99m),
+            new Product(1, "Notebook Acer 16", "Best notebook out there", 399.99m),
             new Product(2, "Mouse Razor 123", "Best Mouse", 14.50m),
         };
 
