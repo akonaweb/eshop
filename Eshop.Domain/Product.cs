@@ -6,7 +6,7 @@
         {
             if (id < 0)
             {
-                throw new ArgumentNullException("id");
+                throw new ArgumentOutOfRangeException("id");
             }
 
             ValidateParameters(title, description, price);
