@@ -5,7 +5,7 @@ namespace Eshop.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ProductController : ControllerBase
+    public class ProductController : Controller
     {
         private static List<Product> Products = new List<Product>
         {
