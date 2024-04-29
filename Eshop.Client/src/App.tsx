@@ -29,7 +29,7 @@ function App() {
   const [products, setProducts] = useState<ProductType[]>([])
   useEffect(()=>{
     const loadProducts = async() =>{
-      const productResult = await (await fetch('https://localhost:7203/Category')).json()
+      const productResult = await (await fetch('https://localhost:7203/Product')).json()
 
       setProducts(productResult)
     }
@@ -52,7 +52,7 @@ function App() {
       {products.map((x) => {
         return (
           <li key={x.id}>
-            {x.id} - {x.title} - {x.description} -{x.price}
+            {x.id} - {x.title} - {x.description} - {x.price}
           </li>
       )
       })}
