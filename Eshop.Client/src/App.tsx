@@ -10,6 +10,7 @@ type ProductType = {
   title: string;
   description: string;
   price: number;
+  catId: number; // The category ID this product belongs to
 };
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
       const categoryResult = await (
         await fetch("https://localhost:7203/Category")
       ).json();
+      console.log("Categories loaded:", categoryResult);
       setCategories(categoryResult);
     };
 
@@ -28,6 +30,7 @@ const App = () => {
       const productResult = await (
         await fetch("https://localhost:7203/Product")
       ).json();
+      console.log("Products loaded:", productResult); // For debbuging
       setProducts(productResult);
     };
 
@@ -37,19 +40,30 @@ const App = () => {
 
   return (
     <div>
-      {categories.map((x) => {
-        return (
-          <li key={x.id}>
-            {x.id} - {x.name}
-          </li>
+      {categories.map((category) => {
+        const filteredProducts = products.filter(
+          (product) => product.catId === category.id
         );
-      })}
+        console.log(`Category ${category.id} has products:`, filteredProducts);
 
-      {products.map((x) => {
         return (
-          <li key={x.id}>
-            {x.id} - {x.title} - {x.description} - {x.price}
-          </li>
+          <div key={category.id}>
+            <h2>
+              {category.id} - {category.name}
+            </h2>
+            <ul>
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((product) => (
+                  <li key={product.id}>
+                    {product.id} - {product.title} - {product.description} - $
+                    {product.price}
+                  </li>
+                ))
+              ) : (
+                <li>No products available for this category</li>
+              )}
+            </ul>
+          </div>
         );
       })}
     </div>
