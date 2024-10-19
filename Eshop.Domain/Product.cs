@@ -1,4 +1,6 @@
-﻿namespace Eshop.Domain
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Eshop.Domain
 {
     public class Product
     {
@@ -6,19 +8,21 @@
         {
             if (id < 0)
             {
-                throw new ArgumentOutOfRangeException("id");
+                throw new ArgumentOutOfRangeException(nameof(id));
             }
 
             ValidateParameters(title, description, price, category);
 
-            Id = id;
+            Id = id; 
             Title = title;
             Description = description;
             Price = price;
             Category = category;
         }
 
-        public int Id { get; }
+        private Product() { }
+
+        public int Id { get; }  
         public string Title { get; private set; }
         public string Description { get; private set; }
         public decimal Price { get; private set; }
@@ -38,22 +42,22 @@
         {
             if (string.IsNullOrEmpty(title) || title.Length > 50)
             {
-                throw new ArgumentNullException("title");
+                throw new ArgumentNullException(nameof(title));
             }
 
             if (string.IsNullOrEmpty(description) || description.Length > 500)
             {
-                throw new ArgumentNullException("description");
+                throw new ArgumentNullException(nameof(description));
             }
 
             if (price < 0)
             {
-                throw new ArgumentNullException("price");
+                throw new ArgumentOutOfRangeException(nameof(price));
             }
 
-            if (category == null) 
+            if (category == null)
             {
-                throw new ArgumentNullException("category");    
+                throw new ArgumentNullException(nameof(category));
             }
         }
     }

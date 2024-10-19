@@ -1,4 +1,5 @@
 ﻿using Eshop.Domain;
+using Eshop.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eshop.WebApi.Controllers
@@ -7,6 +8,13 @@ namespace Eshop.WebApi.Controllers
     [Route("[controller]")]
     public class ProductController : Controller
     {
+        private readonly EshopDbContext dbContext;
+
+        public ProductController(EshopDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
         private static List<Product> Products = new List<Product>
         {
             new Product(1, "Notebook Acer 16", "Best notebook out there", 399.99m, CategoryController.Categories[0]),
@@ -16,23 +24,24 @@ namespace Eshop.WebApi.Controllers
         [HttpGet]
         public List<Product> GetProducts()
         {
-            return Products;
+            return dbContext.Products.ToList();
         }
 
         [HttpGet("{id}")]
         public Product GetProduct(int id)
         {
-            return Products.First(x => x.Id == id);
+            return dbContext.Products.First(x => x.Id == id);
         }
 
         [HttpPost]
         public Product CreateProduct(string title, string description, decimal price, int categoryId)
         {
             var category = CategoryController.Categories.First(x => x.Id == categoryId);
-            var newId = Products.Max(x => x.Id) + 1;
+            var newId = dbContext.Products.Max(x => x.Id) + 1;
             var newProduct = new Product(newId, title, description, price, category);
             
-            Products.Add(newProduct);
+            dbContext.Products.Add(newProduct);
+            dbContext.SaveChanges();
 
             return newProduct;
         }
@@ -40,16 +49,20 @@ namespace Eshop.WebApi.Controllers
         [HttpDelete("{id}")]
         public void DeleteProduct(int id)
         {
-            var productToBeDeleted = Products.First(x => x.Id == id);
-            Products.Remove(productToBeDeleted);
+            var productToBeDeleted = dbContext.Products.First(x => x.Id == id);
+            dbContext.Products.Remove(productToBeDeleted);
+
+            dbContext.SaveChanges();
         }
 
         [HttpPut("{id}")]
         public Product UpdateProduct(int id, string title, string description, decimal price, int categoryId)
         {
             var category = CategoryController.Categories.First(x => x.Id == categoryId);
-            var productToBeUpdated = Products.First(x => x.Id == id);
+            var productToBeUpdated = dbContext.Products.First(x => x.Id == id);
             productToBeUpdated.Update(title, description, price, category);
+
+            dbContext.SaveChanges();
 
             return productToBeUpdated;
         }

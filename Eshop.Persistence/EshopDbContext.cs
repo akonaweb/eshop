@@ -1,5 +1,7 @@
 ﻿using Eshop.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace Eshop.Persistence
 {
@@ -14,10 +16,14 @@ namespace Eshop.Persistence
         }
 
         public DbSet<Category> Categories  { get; private set; }
+        public DbSet<Product> Products { get; private set; } 
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            builder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

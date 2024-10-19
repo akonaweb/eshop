@@ -24,7 +24,7 @@ namespace Eshop.WebApi.Controllers
         [HttpGet]
         public List<Category> GetCategories()
         {
-            return dbContext.Categories.ToList(); ;
+            return dbContext.Categories.ToList(); 
         }
 
         [HttpGet("{id}")]
