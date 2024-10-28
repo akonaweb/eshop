@@ -1,7 +1,11 @@
-﻿namespace Eshop.Domain
+﻿using System.Reflection.Metadata;
+
+namespace Eshop.Domain
 {
     public class Category
     {
+        private Category() { } // This constuctor is only for EF
+
         public Category(int id, string name)
         {
             if (id < 0)
@@ -15,7 +19,7 @@
             Name = name;
         }
 
-        public int Id { get; }
+        public int Id { get; set; }
         public string Name { get; private set; }
 
         public void Udpate(string name)

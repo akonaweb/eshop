@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Eshop.Domain
+﻿namespace Eshop.Domain
 {
     public class Product
     {
+        private Product() { } // This constuctor is only for EF
+
         public Product(int id, string title, string description, decimal price, Category category)
         {
             if (id < 0)
@@ -20,9 +20,7 @@ namespace Eshop.Domain
             Category = category;
         }
 
-        private Product() { }
-
-        public int Id { get; }  
+        public int Id { get; set; }  
         public string Title { get; private set; }
         public string Description { get; private set; }
         public decimal Price { get; private set; }

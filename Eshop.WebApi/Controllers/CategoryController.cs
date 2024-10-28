@@ -37,6 +37,7 @@ namespace Eshop.WebApi.Controllers
         public Category CreateCategory(string name) 
         { 
             var newCategory = new Category(0, name);
+            var newId = dbContext.Categories.Max(x => x.Id) + 1;
 
             dbContext.Categories.Add(newCategory);
             dbContext.SaveChanges();

@@ -15,12 +15,6 @@ namespace Eshop.WebApi.Controllers
             this.dbContext = dbContext;
         }
 
-        private static List<Product> Products = new List<Product>
-        {
-            new Product(1, "Notebook Acer 16", "Best notebook out there", 399.99m, CategoryController.Categories[0]),
-            new Product(2, "Mouse Razor 123", "Best Mouse", 14.50m, CategoryController.Categories[1]),
-        };
-
         [HttpGet]
         public List<Product> GetProducts()
         {

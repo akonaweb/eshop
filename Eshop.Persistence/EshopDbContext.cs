@@ -1,7 +1,5 @@
 ﻿using Eshop.Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
 namespace Eshop.Persistence
 {
@@ -20,9 +18,6 @@ namespace Eshop.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
-
             base.OnModelCreating(modelBuilder);
         }
     }
