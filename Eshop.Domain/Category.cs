@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-
-namespace Eshop.Domain
+﻿namespace Eshop.Domain
 {
     public class Category
     {
@@ -19,8 +17,9 @@ namespace Eshop.Domain
             Name = name;
         }
 
-        public int Id { get; set; }
+        public int Id { get; }
         public string Name { get; private set; }
+        public ICollection<Product> Products { get; set; }
 
         public void Udpate(string name)
         {
