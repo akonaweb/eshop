@@ -6,7 +6,7 @@
         {
             if (id < 0)
             {
-                throw new ArgumentOutOfRangeException("id");
+                throw new ArgumentOutOfRangeException(nameof(id));
             }
 
             ValidateParameters(name);
@@ -29,7 +29,7 @@
         {
             if (string.IsNullOrEmpty(name) || name.Length > 50)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
         }
     }

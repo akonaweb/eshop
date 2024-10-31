@@ -7,9 +7,10 @@ namespace Eshop.Persistence
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Category> builder)
         {
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Name);
             builder.ToTable("Category");
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Name);
         }
     }
 }

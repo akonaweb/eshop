@@ -1,17 +1,27 @@
 using Eshop.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// https://stackoverflow.com/questions/59199593/net-core-3-0-possible-object-cycle-was-detected-which-is-not-supported
+// TODO: When we include MediatR then remove this - because we will always use DTOs instead of Domain Entities
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // EF Configuration
-builder.Services.AddDbContext<EshopDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<EshopDbContext>(
+    options => options.UseSqlServer(connectionString)
+                      .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
+);
 
 // Cors Configuration
 var devCorsPolicy = "devCorsPolicy";
@@ -38,7 +48,7 @@ static void CreateDbIfNotExists(IHost host)
             var context = services.GetRequiredService<EshopDbContext>();
             context.Database.EnsureCreated();
         }
-        catch (Exception) 
+        catch (Exception)
         {
             throw;
         }

@@ -24,9 +24,9 @@ const Products = ({ activeCategoryId }: Props) => {
       ).json();
 
       setProducts(
-        productResult.filter(
+        productResult?.filter(
           (x: { category: { id: number } }) =>
-            x.category.id === activeCategoryId
+            x.category?.id === activeCategoryId
         )
       );
     };
