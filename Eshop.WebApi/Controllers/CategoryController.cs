@@ -1,6 +1,7 @@
 ﻿using Eshop.Domain;
 using Eshop.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Eshop.WebApi.Controllers
 {
@@ -15,25 +16,21 @@ namespace Eshop.WebApi.Controllers
             this.dbContext = dbContext;
         }
 
-        public static List<Category> Categories = new List<Category>
-        {
-            new Category(1, "Computers"),
-            new Category(2, "Mouses")
-        };
-
         [HttpGet]
+        // TODO: we should return always DTO instead of domain entity
         public List<Category> GetCategories()
         {
-            return dbContext.Categories.ToList(); ;
+            return dbContext.CategoriesViews.ToList(); ;
         }
 
         [HttpGet("{id}")]
         public Category GetCategory(int id) 
         {
-            return dbContext.Categories.First(x => x.Id == id);
+            return dbContext.CategoriesViews.First(x => x.Id == id);
         }
 
         [HttpPost]
+        // TODO: create request dto for body instead of query params
         public Category CreateCategory(string name) 
         { 
             var newCategory = new Category(0, name);
@@ -49,15 +46,18 @@ namespace Eshop.WebApi.Controllers
         { 
             var categoryToBeDeleted = dbContext.Categories.First(x => x.Id == id);
             dbContext.Categories.Remove(categoryToBeDeleted);
-
             dbContext.SaveChanges();
         }
 
         [HttpPut("{id}")]
+        // TODO: create request dto for body instead of query params
         public Category UpdateCategory(int id, string name) 
         {
             var categoryToBeUpdated = dbContext.Categories.First(x => x.Id == id);
             categoryToBeUpdated.Udpate(name);
+            // dbContext.Categories.Update(categoryToBeUpdated);
+            // NOTE: we are not using here dbContext.Update or dbContext.Categories.Update and it works
+            // dbContext.ChangeTracker.DetectChanges();
 
             dbContext.SaveChanges();
 
