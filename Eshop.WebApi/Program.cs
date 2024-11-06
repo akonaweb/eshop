@@ -21,6 +21,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<EshopDbContext>(
     options => options.UseSqlServer(connectionString)
                       .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
+                      .EnableSensitiveDataLogging(true)
 );
 
 // Cors Configuration
@@ -46,7 +47,7 @@ static void CreateDbIfNotExists(IHost host)
         try
         {
             var context = services.GetRequiredService<EshopDbContext>();
-            context.Database.EnsureCreated();
+            context.Database.EnsureCreated(); // TODO: later we will use Migrate()
         }
         catch (Exception)
         {
