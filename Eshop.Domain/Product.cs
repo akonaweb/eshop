@@ -1,10 +1,9 @@
 ﻿namespace Eshop.Domain
 {
     public class Product
-    {
-        // private ctor needed for a persistence - Entity Framework
+    {        
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        private Product() { }
+        private Product() { } // private ctor needed for a persistence - Entity Framework
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
         public Product(int id, string title, string description, decimal price, Category? category)
