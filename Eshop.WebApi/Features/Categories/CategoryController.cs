@@ -1,13 +1,12 @@
 ﻿using Eshop.Domain;
 using Eshop.Persistence;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace Eshop.WebApi.Controllers
+namespace Eshop.WebApi.Features.Categories
 {
     [ApiController]
     [Route("[controller]")]
-    public class CategoryController : Controller
+    public class CategoryController : ControllerBase
     {
         private readonly EshopDbContext dbContext;
 
@@ -17,22 +16,20 @@ namespace Eshop.WebApi.Controllers
         }
 
         [HttpGet]
-        // TODO: we should return always DTO instead of domain entity
         public List<Category> GetCategories()
         {
-            return dbContext.CategoriesViews.ToList(); ;
+            return dbContext.CategoriesViews.ToList();
         }
 
         [HttpGet("{id}")]
-        public Category GetCategory(int id) 
+        public Category GetCategory(int id)
         {
             return dbContext.CategoriesViews.First(x => x.Id == id);
         }
 
         [HttpPost]
-        // TODO: create request dto for body instead of query params
-        public Category CreateCategory(string name) 
-        { 
+        public Category AddCategory(string name)
+        {
             var newCategory = new Category(0, name);
 
             dbContext.Categories.Add(newCategory);
@@ -42,22 +39,18 @@ namespace Eshop.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void DeleteCategory(int id) 
-        { 
+        public void DeleteCategory(int id)
+        {
             var categoryToBeDeleted = dbContext.Categories.First(x => x.Id == id);
             dbContext.Categories.Remove(categoryToBeDeleted);
             dbContext.SaveChanges();
         }
 
         [HttpPut("{id}")]
-        // TODO: create request dto for body instead of query params
-        public Category UpdateCategory(int id, string name) 
+        public Category UpdateCategory(int id, string name)
         {
             var categoryToBeUpdated = dbContext.Categories.First(x => x.Id == id);
             categoryToBeUpdated.Udpate(name);
-            // dbContext.Categories.Update(categoryToBeUpdated);
-            // NOTE: we are not using here dbContext.Update or dbContext.Categories.Update and it works
-            // dbContext.ChangeTracker.DetectChanges();
 
             dbContext.SaveChanges();
 

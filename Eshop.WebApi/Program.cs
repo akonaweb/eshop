@@ -1,16 +1,13 @@
 using Eshop.Persistence;
+using Eshop.WebApi.Filters;
+using MediatR.Extensions.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 
+var assembly = typeof(Program).Assembly;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// https://stackoverflow.com/questions/59199593/net-core-3-0-possible-object-cycle-was-detected-which-is-not-supported
-// TODO: When we include MediatR then remove this - because we will always use DTOs instead of Domain Entities
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});
+builder.Services.AddControllers(SetupControllers);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -23,6 +20,10 @@ builder.Services.AddDbContext<EshopDbContext>(
                       .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
                       .EnableSensitiveDataLogging(true)
 );
+
+// MediatR - the only nuget package needed is MediatR.Extensions.FluentValidation.AspNetCore - rest are included automatically
+builder.Services.AddFluentValidation([assembly]);
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assembly));
 
 // Cors Configuration
 var devCorsPolicy = "devCorsPolicy";
@@ -71,3 +72,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+void SetupControllers(MvcOptions options)
+{
+    options.Filters.Add<GlobalExceptionFilter>();
+}
