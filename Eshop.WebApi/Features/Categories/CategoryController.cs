@@ -1,6 +1,8 @@
 ﻿using Eshop.Domain;
 using Eshop.Persistence;
+using Eshop.WebApi.Features.Products;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -9,31 +11,34 @@ namespace Eshop.WebApi.Features.Categories
 {
     [ApiController]
     [Route("[controller]")]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public class CategoryController : ControllerBase
     {
-        private readonly EshopDbContext dbContext;
+        private readonly IMediator mediator;
 
-        public CategoryController(EshopDbContext dbContext)
+        public CategoryController(IMediator mediator)
         {
-            this.dbContext = dbContext;
+            this.mediator = mediator; 
         }
 
+        [HttpGet(Name = nameof(GetCategories))]
+        [ProducesResponseType(typeof(IEnumerable<GetProductResponseDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<GetCategoriesResposneDto>>> GetCategories()
         [HttpGet(Name = nameof(GetCategories))]
         [ProducesResponseType(typeof(IEnumerable<GetCategoryResponseDto>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<GetCategoriesResponseDto>>> GetCategories()
         [HttpGet]
         public List<Category> GetCategories()
         {
-            return dbContext.CategoriesViews.ToList();
+            var result = await mediator.Send(new GetCategories.Query());
+            return Ok(result);
         }
 
         [HttpGet("{id}", Name = nameof(GetCategory))]
-        [ProducesResponseType(typeof(GetCategoryResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetCategoryeRsponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)] 
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UpdateCategoryResponseDto>> GetCategoryForUpdate(int id, UpdateCategoryResponseDto request)
-        [HttpGet("{id}")]
-        public Category GetCategory(int id)
+        public async Task<ActionResult<UpdateCategoryResponseDto>> UpdateCategory(int id, UpdateCategoryResponseDto request)
         {
             var result = await mediator.Send(new GetCategory.Query(id));
             return Ok(result);
