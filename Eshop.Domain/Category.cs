@@ -4,11 +4,6 @@
     {
         public Category(int id, string name)
         {
-            if (id < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(id));
-            }
-
             ValidateParameters(name);
 
             Id = id;
@@ -25,7 +20,7 @@
             Name = name;
         }
 
-        private void ValidateParameters(string name)
+        private static void ValidateParameters(string name)
         {
             if (string.IsNullOrEmpty(name?.Trim()) || name.Length > 50)
             {
