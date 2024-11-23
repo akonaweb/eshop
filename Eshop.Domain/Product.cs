@@ -8,10 +8,7 @@
 
         public Product(int id, string title, string description, decimal price, Category? category)
         {
-            if (id < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(id));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(id);
 
             ValidateParameters(title, description, price);
 
