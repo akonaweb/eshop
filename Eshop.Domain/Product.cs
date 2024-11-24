@@ -27,6 +27,7 @@
         public string Description { get; private set; }
         public decimal Price { get; private set; }
         public Category? Category { get; private set; }
+        public string Name { get; set; }
 
         public void Update(string title, string description, decimal price, Category? category)
         {

@@ -1,6 +1,9 @@
 ﻿using Eshop.Domain;
 using Eshop.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Eshop.WebApi.Features.Categories
 {
@@ -15,46 +18,54 @@ namespace Eshop.WebApi.Features.Categories
             this.dbContext = dbContext;
         }
 
+        [HttpGet(Name = nameof(GetCategories))]
+        [ProducesResponseType(typeof(IEnumerable<GetCategoryResponseDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<GetCategoriesResponseDto>>> GetCategories()
         [HttpGet]
         public List<Category> GetCategories()
         {
             return dbContext.CategoriesViews.ToList();
         }
 
+        [HttpGet("{id}", Name = nameof(GetCategory))]
+        [ProducesResponseType(typeof(GetCategoryResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)] 
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UpdateCategoryResponseDto>> GetCategoryForUpdate(int id, UpdateCategoryResponseDto request)
         [HttpGet("{id}")]
         public Category GetCategory(int id)
         {
-            return dbContext.CategoriesViews.First(x => x.Id == id);
+            var result = await mediator.Send(new GetCategory.Query(id));
+            return Ok(result);
         }
 
-        [HttpPost]
-        public Category AddCategory(string name)
+        [HttpPost(Name = nameof(AddCategory))]
+        [ProducesResponseType(typeof(AddCategoryResponseDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<AddCategoryResponseDto>> AddCategory(AddCategoryRequestDto requestDto)
         {
-            var newCategory = new Category(0, name);
-
-            dbContext.Categories.Add(newCategory);
-            dbContext.SaveChanges();
-
-            return newCategory;
+            var result = await mediator.Send(new AddCategory.Command(requestDto));
+            return CreatedAtAction(nameof(GetCategory), new { id = result.Id }, result);
         }
 
-        [HttpDelete("{id}")]
-        public void DeleteCategory(int id)
+        [HttpPut("{id}", Name = nameof(UpdateCategory))]
+        [ProducesResponseType(typeof(UpdateCategoryResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UpdateCategoryResponseDto>> UpdateCategory(int id, UpdateCategoryResponseDto request)
         {
-            var categoryToBeDeleted = dbContext.Categories.First(x => x.Id == id);
-            dbContext.Categories.Remove(categoryToBeDeleted);
-            dbContext.SaveChanges();
+            var result = await mediator.Send(new UpdateCategory.Command(id, request));
+            return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public Category UpdateCategory(int id, string name)
+        [HttpDelete("{id}", Name = nameof(DeleteCategory))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteCategory(int id)
         {
-            var categoryToBeUpdated = dbContext.Categories.First(x => x.Id == id);
-            categoryToBeUpdated.Udpate(name);
-
-            dbContext.SaveChanges();
-
-            return categoryToBeUpdated;
+            await mediator.Send(new DeleteCategory.Command(id));
+            return NoContent();
         }
     }
 }
