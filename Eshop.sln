@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.WebApi", "Eshop.WebAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.Persistence", "Eshop.Persistence\Eshop.Persistence.csproj", "{2A57C2E2-041E-48C7-9987-D0A3AF9C7D86}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AB216D84-6C5B-4092-B3F1-E4086F616057}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.Domain.Tests", "tests\Eshop.Domain.Tests\Eshop.Domain.Tests.csproj", "{1630AC71-EA28-455F-ACA9-73A7BEC29F6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,9 +43,16 @@ Global
 		{2A57C2E2-041E-48C7-9987-D0A3AF9C7D86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A57C2E2-041E-48C7-9987-D0A3AF9C7D86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A57C2E2-041E-48C7-9987-D0A3AF9C7D86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1630AC71-EA28-455F-ACA9-73A7BEC29F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1630AC71-EA28-455F-ACA9-73A7BEC29F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1630AC71-EA28-455F-ACA9-73A7BEC29F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1630AC71-EA28-455F-ACA9-73A7BEC29F6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1630AC71-EA28-455F-ACA9-73A7BEC29F6E} = {AB216D84-6C5B-4092-B3F1-E4086F616057}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5913E2F-0E2B-4ADD-B9E7-124DD54AFEC8}
