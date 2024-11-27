@@ -40,6 +40,8 @@ var app = builder.Build();
 // EF
 CreateDbIfNotExists(app);
 
+// Test
+
 static void CreateDbIfNotExists(IHost host)
 {
     using (var scope = host.Services.CreateScope())
