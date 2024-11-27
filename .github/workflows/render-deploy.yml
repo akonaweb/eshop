@@ -2,7 +2,9 @@ name: Render Deploy
 
 on:
   push:
-    branches: [ "tonco/integration-tests" ]
+    branches:
+      - tonco/integration-tests
+  workflow_dispatch:
 
 jobs:
   build:
