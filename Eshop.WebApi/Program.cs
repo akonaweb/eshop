@@ -48,7 +48,10 @@ static void CreateDbIfNotExists(IHost host)
         try
         {
             var context = services.GetRequiredService<EshopDbContext>();
-            context.Database.EnsureCreated(); // TODO: later we will use Migrate()
+            if (!context.Database.CanConnect())
+            {
+                context.Database.EnsureCreated(); // TODO: later we will use Migrate() without if CanConnect
+            }
         }
         catch (Exception)
         {

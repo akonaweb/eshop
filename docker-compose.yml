@@ -1,0 +1,31 @@
+﻿services:
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80 # HTTP only
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=${DB_NAME};User=sa;Password=${SA_PASSWORD};TrustServerCertificate=True
+    depends_on:
+      - mssql
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${SA_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "sqlcmd -U sa -P ${SA_PASSWORD} -Q 'select 1'" ]
+      interval: 10s
+      retries: 3
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:

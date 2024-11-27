@@ -1,7 +1,26 @@
+using Eshop.WebApi.Features.Products;
+
 namespace Eshop.Domain.Tests
 {
-    public class CategoryTests
+    public class CategoryTests : TestBase
     {
+        [SetUp]
+        public async Task Seed()
+        {
+            await dbContext.Products.AddAsync(new Product(0, "Test product", "bla", 1, null));
+            await dbContext.SaveChangesAsync();
+        }
+
+        [Test]
+        public async Task Test()
+        {
+            var command = new GetProduct.Query(1);
+            var handler = new GetProduct.Handler(dbContext);
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            
+        }
+
         [Test]
         public void Category_WithValidParams_SetCorrectlyProperties()
         {
