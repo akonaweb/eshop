@@ -1,9 +1,19 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - tonco/integration-tests
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker-compose build
 
       - name: Deploy to Render
         env:
