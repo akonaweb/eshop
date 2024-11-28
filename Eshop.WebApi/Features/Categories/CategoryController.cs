@@ -1,11 +1,5 @@
-﻿using Eshop.Domain;
-using Eshop.Persistence;
-using Eshop.WebApi.Features.Products;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using MediatR;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Eshop.WebApi.Features.Categories
 {
@@ -22,23 +16,18 @@ namespace Eshop.WebApi.Features.Categories
         }
 
         [HttpGet(Name = nameof(GetCategories))]
-        [ProducesResponseType(typeof(IEnumerable<GetProductResponseDto>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<GetCategoriesResposneDto>>> GetCategories()
-        [HttpGet(Name = nameof(GetCategories))]
-        [ProducesResponseType(typeof(IEnumerable<GetCategoryResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<GetCategoriesResponseDto>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<GetCategoriesResponseDto>>> GetCategories()
-        [HttpGet]
-        public List<Category> GetCategories()
         {
             var result = await mediator.Send(new GetCategories.Query());
             return Ok(result);
         }
 
         [HttpGet("{id}", Name = nameof(GetCategory))]
-        [ProducesResponseType(typeof(GetCategoryeRsponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetCategoryResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)] 
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UpdateCategoryResponseDto>> UpdateCategory(int id, UpdateCategoryResponseDto request)
+        public async Task<ActionResult<GetCategoryResponseDto>> GetCategory(int id)
         {
             var result = await mediator.Send(new GetCategory.Query(id));
             return Ok(result);
@@ -47,9 +36,9 @@ namespace Eshop.WebApi.Features.Categories
         [HttpPost(Name = nameof(AddCategory))]
         [ProducesResponseType(typeof(AddCategoryResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AddCategoryResponseDto>> AddCategory(AddCategoryRequestDto requestDto)
+        public async Task<ActionResult<AddCategoryResponseDto>> AddCategory(AddCategoryRequestDto request)
         {
-            var result = await mediator.Send(new AddCategory.Command(requestDto));
+            var result = await mediator.Send(new AddCategory.Command(request));
             return CreatedAtAction(nameof(GetCategory), new { id = result.Id }, result);
         }
 

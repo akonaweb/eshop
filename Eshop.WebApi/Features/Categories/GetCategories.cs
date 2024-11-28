@@ -21,9 +21,10 @@ namespace Eshop.WebApi.Features.Categories
             public async Task<IEnumerable<GetCategoriesResponseDto>> Handle(Query command, CancellationToken cancellationToken)
             {
                 var categories = await dbContext.CategoriesViews
+                    .Include(x => x.categories)
                     .ToListAsync(cancellationToken);
 
-                return (IEnumerable<GetCategoriesResponseDto>)categories.Select(GetCategoriesResponseDto.Map).ToList();
+                return categories.Select(GetCategoriesResponseDto.Map).ToList();
             }
         }
     }
@@ -33,9 +34,13 @@ namespace Eshop.WebApi.Features.Categories
         public int Id { get; set; }
         public required string Name { get; set; }
 
-        internal static object Map(Category category, int arg2)
+        public static GetCategoriesResponseDto Map(Category result)
         {
-            throw new NotImplementedException();
+            return new GetCategoriesResponseDto
+            {
+                Id = result.Id,
+                Name = result.Name
+            };
         }
     }
 }

@@ -15,11 +15,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.Domain", "Eshop.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.WebApi", "Eshop.WebApi\Eshop.WebApi.csproj", "{775AF4F4-1B8B-4E4C-9910-68528062FCAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.Persistence", "Eshop.Persistence\Eshop.Persistence.csproj", "{2A57C2E2-041E-48C7-9987-D0A3AF9C7D86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.Persistence", "Eshop.Persistence\Eshop.Persistence.csproj", "{2A57C2E2-041E-48C7-9987-D0A3AF9C7D86}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AB216D84-6C5B-4092-B3F1-E4086F616057}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.Domain.Tests", "tests\Eshop.Domain.Tests\Eshop.Domain.Tests.csproj", "{1630AC71-EA28-455F-ACA9-73A7BEC29F6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.Domain.Tests", "tests\Eshop.Domain.Tests\Eshop.Domain.Tests.csproj", "{1630AC71-EA28-455F-ACA9-73A7BEC29F6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.WebApi.Tests", "tests\Eshop.WebApi.Tests\Eshop.WebApi.Tests.csproj", "{08D837D8-7DE2-4A50-9D14-D76D9B2F9A3E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8460D39E-AB93-401F-8CE3-B5A3E942E912}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.WebApi.Tests", "tests\Eshop.WebApi.Tests\Eshop.WebApi.Tests.csproj", "{08D837D8-7DE2-4A50-9D14-D76D9B2F9A3E}"
 EndProject

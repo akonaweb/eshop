@@ -18,6 +18,12 @@ namespace Eshop.Persistence
         {
             builder.ApplyConfiguration(new CategoryConfiguration());
             builder.ApplyConfiguration(new ProductConfiguration());
+
+            builder.Entity<Category>()
+                .HasMany(c => c.categories) 
+                .WithOne(c => c.ParentCategory) 
+                .HasForeignKey(c => c.ParentCategoryId) 
+                .OnDelete(DeleteBehavior.Restrict); 
         }
     }
 }

@@ -1,10 +1,6 @@
-using Eshop.Domain;
 using Eshop.Persistence;
-using Eshop.WebApi.Features.Products;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Eshop.WebApi.Features.Categories
 {
@@ -16,7 +12,6 @@ namespace Eshop.WebApi.Features.Categories
         {
             public Validator()
             {
-                RuleFor(x => x.Request.Id).GreaterThan(0);
                 RuleFor(x => x.Request.Name).NotEmpty();
             }
         }
@@ -33,8 +28,7 @@ namespace Eshop.WebApi.Features.Categories
             public async Task<AddCategoryResponseDto> Handle(Command command, CancellationToken cancellationToken)
             {
                 var request = command.Request;
-                var category = await dbContext.Categories.FirstOrDefaultAsync(cancellationToken);
-                
+                var category = new Category(0, request.Name);
                 var result = await dbContext.Categories.AddAsync(category, cancellationToken);
 
                 await dbContext.SaveChangesAsync(cancellationToken);
