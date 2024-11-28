@@ -1,0 +1,35 @@
+name: Render Deploy
+
+on:
+  push:
+    branches:
+      - tonco/integration-tests
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Compose
+      run: |
+        sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        docker-compose --version
+
+    - name: Verify Docker installation
+      run: docker --version
+
+    - name: Build Docker image
+      run: docker-compose build
+
+    - name: Deploy to Render
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+      run: |
+        curl -X POST https://api.render.com/v1/services/${RENDER_SERVICE_ID}/deploys \
+          -H "Authorization: Bearer ${RENDER_API_KEY}" \
+          -d '{}'
