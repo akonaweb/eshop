@@ -109,7 +109,7 @@ namespace Eshop.Domain.Tests
 
         static string GenerateRandomString(int length)
         {
-            Random random = new Random();
+            Random random = new();
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";  // Can be expanded if needed
             char[] stringChars = new char[length];
 
