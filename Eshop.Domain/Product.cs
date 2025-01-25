@@ -19,6 +19,14 @@
             Category = category;
         }
 
+        public Product(int id, string title, string description, int price, int category)
+        {
+            Id = id;
+            Title = title;
+            Description = description;
+            Price = price;
+        }
+
         public int Id { get; }
         public string Title { get; private set; }
         public string Description { get; private set; }
@@ -51,6 +59,21 @@
             {
                 throw new ArgumentNullException(nameof(price));
             }
+        }
+
+        public void Update(string newTitle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePrice(int newPrice)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateCategory(int newCategory)
+        {
+            throw new NotImplementedException();
         }
     }
 }
