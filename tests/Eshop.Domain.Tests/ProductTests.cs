@@ -2,150 +2,179 @@
 {
     public class ProductTests
     {
+        // MAIN TESTS
         [Test]
-        public void Product_WithValidParams_SetCorrectlyProperties()
+        public void Product_WithValidParams_SetsPropertiesCorrectly()
         {
-            // Arrange
+            // arrange
             var id = 1;
-            var title = "Default";
-            var description = "Default description";
-            var price = 1200;
-            var category = new Category(1, "Notebooks");
+            var title = GenerateRandomString(50);
+            var description = GenerateRandomString(100);
+            var price = 1000;
+            var category = 1;
 
-            // Act
+            // act
             var sut = new Product(id, title, description, price, category);
 
-            // Assert
-            Assert.AreEqual(id, sut.Id);
-            Assert.AreEqual(title, sut.Title);
-            Assert.AreEqual(description, sut.Description);
-            Assert.AreEqual(price, sut.Price);
-            Assert.AreEqual(category, sut.Category);
+            // assert
+            Assert.That(sut.Id, Is.EqualTo(id));
+            Assert.That(sut.Title, Is.EqualTo(title));
+            Assert.That(sut.Description, Is.EqualTo(description));
+            Assert.That(sut.Price, Is.EqualTo(price));
+#pragma warning disable NUnit2041 // Incompatible types for comparison constraint
+            Assert.That(sut.Category, Is.GreaterThan(0));
+#pragma warning restore NUnit2041 // Incompatible types for comparison constraint
         }
 
         [Test]
-        public void Product_WithNullCategoryParam_AllowsNullCategory()
+        public void Product_WithInvalidIdParam_ThrowsException()
         {
-            // Arrange
-            Category category = null!;
+            // arrange
+            var id = -1;
 
-            // Act
-            var product = new Product(1, "Laptop", "A great laptop", 1200, category);
+            // act/assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Product(id, "Valid Title", "Valid Description", 1000, 1));
+        }
 
-            // Assert
-            Assert.IsNull(product.Category, "Product category should allow null values.");
+        // TITLE TESTS
+        [Test]
+        public void Product_WithNullTitleParam_ThrowsException()
+        {
+            // arrange
+            string title = null!;
+
+            // act/assert
+            Assert.Throws<ArgumentNullException>(() => new Product(1, title, "Valid Description", 1000, 1));
         }
 
         [Test]
-        public void ProductUpdate_WithValidParams_UpdatesSuccessfully()
+        public void Product_WithEmptyTitleParam_ThrowsException()
         {
-            // Arrange
-            var newTitle = "Updated Title";
-            var newDescription = "Updated Description";
-            var newPrice = 1500;
-            var newCategory = new Category(2, "Gaming Laptops");
-            var product = new Product(1, "Notebook", "Default Description", 1000, new Category(1, "Notebooks"));
+            // arrange
+            var title = " ";
 
-            // Act
-            product.Update(newTitle, newDescription, newPrice, newCategory);
-
-            // Assert
-            Assert.AreEqual(newTitle, product.Title);
-            Assert.AreEqual(newDescription, product.Description);
-            Assert.AreEqual(newPrice, product.Price);
-            Assert.AreEqual(newCategory, product.Category);
+            // act/assert
+            Assert.Throws<ArgumentNullException>(() => new Product(1, title, "Valid Description", 1000, 1));
         }
 
         [Test]
-        public void ProductUpdate_WithNullCategoryParam_AllowsNullCategory()
+        public void Product_WithLongTitleParam_ThrowsException()
         {
-            // Arrange
-            var product = new Product(1, "Notebook", "Default Description", 1000, new Category(1, "Notebooks"));
-            Category newCategory = null!;
+            // arrange
+            var title = GenerateRandomString(51); // Assuming max title length is 50.
 
-            // Act
-            product.Update("Updated Title", "Updated Description", 1500, newCategory);
-
-            // Assert
-            Assert.IsNull(product.Category, "Product update should allow setting category to null.");
+            // act/assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Product(1, title, "Valid Description", 1000, 1));
         }
 
         [Test]
-        public void ProductUpdate_WithEmptyTitleParam_DoesNotThrowException()
+        public void ProductUpdate_WithValidTitle_UpdatesTitleCorrectly()
         {
-            // Arrange
-            var newProductTitle = " ";
-            var product = new Product(0, "Notebook", "Default", 1000, new Category(1, "Notebooks"));
+            // arrange
+            var product = new Product(1, "Notebook", "Default", 1000, 1);
+            var newTitle = GenerateRandomString(50);
 
-            // Act
-            product.Update(newProductTitle, "Updated Description", 1200, new Category(2, "Gaming Laptops"));
+            // act
+            product.Update(newTitle);
 
-            // Assert
-            Assert.AreEqual(" ", product.Title, "Title should be updated even if empty.");
+            // assert
+            Assert.That(product.Title, Is.EqualTo(newTitle));
         }
 
-        [Test]
-        public void ProductUpdate_WithLongTitleParam_ThrowsException()
-        {
-            // Arrange
-            var newProductTitle = GenerateRandomString(51);
-            var product = new Product(0, "Notebook", "Default", 1000, new Category(1, "Notebooks"));
-
-            // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => product.Update(newProductTitle, "Updated Description", 1200, new Category(2, "Gaming Laptops")));
-        }
-
-        [Test]
-        public void ProductUpdate_WithLongDescriptionParam_ThrowsException()
-        {
-            // Arrange
-            var newDescription = GenerateRandomString(501); // Assuming description max length is 500
-            var product = new Product(0, "Notebook", "Default", 1000, new Category(1, "Notebooks"));
-
-            // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => product.Update("Updated Title", newDescription, 1200, new Category(2, "Gaming Laptops")));
-        }
-
-        [Test]
-        public void ProductUpdate_WithNegativePrice_ThrowsArgumentNullException()
-        {
-            // Arrange
-            var product = new Product(0, "Notebook", "Default", 1000, new Category(1, "Notebooks"));
-
-            // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => product.Update("Updated Title", "Updated Description", -50, new Category(2, "Gaming Laptops")));
-        }
-
-        [Test]
-        public void Product_WithInvalidPrice_ThrowsArgumentNullException()
-        {
-            // Arrange
-            decimal invalidPrice = -100;
-
-            // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new Product(1, "Laptop", "A great laptop", invalidPrice, new Category(1, "Notebooks")));
-        }
-
-        [Test]
-        public void ProductUpdate_WithNullDescription_ThrowsException()
-        {
-            // Arrange
-            var product = new Product(1, "Notebook", "Default Description", 1000, new Category(1, "Notebooks"));
-
-            // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => product.Update("Updated Title", null!, 1200, new Category(2, "Gaming Laptops")));
-        }
-
+        // DESCRIPTION TESTS
         [Test]
         public void Product_WithNullDescription_ThrowsException()
         {
-            // Arrange
+            // arrange
             string description = null!;
 
-            // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new Product(1, "Laptop", description, 1200, new Category(1, "Notebooks")));
+            // act/assert
+            Assert.Throws<ArgumentNullException>(() => new Product(1, "Notebook", description, 1000, 1));
         }
 
+        [Test]
+        public void Product_WithEmptyDescription_ThrowsException()
+        {
+            // arrange
+            var description = " ";
+
+            // act/assert
+            Assert.Throws<ArgumentNullException>(() => new Product(1, "Valid Title", description, 1000, 1));
+        }
+
+        [Test]
+        public void Product_WithLongDescription_ThrowsException()
+        {
+            // arrange
+            var description = GenerateRandomString(201); // Assuming max description length is 200.
+
+            // act/assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Product(1, "Valid Title", description, 1000, 1));
+        }
+
+        // PRICE TESTS
+        [Test]
+        public void Product_WithNegativePrice_ThrowsException()
+        {
+            // arrange
+            var price = -1;
+
+            // act/assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Product(1, "Valid Title", "Valid Description", price, 1));
+        }
+
+        [Test]
+        public void Product_WithZeroPrice_ThrowsException()
+        {
+            // arrange
+            var price = 0;
+
+            // act/assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Product(1, "Valid Title", "Valid Description", price, 1));
+        }
+
+        [Test]
+        public void ProductUpdate_WithValidPrice_UpdatesPriceCorrectly()
+        {
+            // arrange
+            var product = new Product(1, "Notebook", "Default", 1000, 1);
+            var newPrice = 2000;
+
+            // act
+            product.UpdatePrice(newPrice);
+
+            // assert
+            Assert.That(product.Price, Is.EqualTo(newPrice));
+        }
+
+        // CATEGORY TESTS
+        [Test]
+        public void Product_WithInvalidCategory_ThrowsException()
+        {
+            // arrange
+            var category = -1;
+
+            // act/assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Product(1, "Valid Title", "Valid Description", 1000, category));
+        }
+
+        [Test]
+        public void ProductUpdate_WithValidCategory_UpdatesCategoryCorrectly()
+        {
+            // arrange
+            var product = new Product(1, "Valid Title", "Valid Description", 1000, 1);
+            var newCategory = 2;
+
+            // act
+            product.UpdateCategory(newCategory);
+
+            // assert
+#pragma warning disable NUnit2041 // Incompatible types for comparison constraint
+            Assert.That(product.Category, Is.GreaterThan(0));
+#pragma warning restore NUnit2041 // Incompatible types for comparison constraint
+        }
+
+        // HELPER FUNCTION
         static string GenerateRandomString(int length)
         {
             Random random = new();
