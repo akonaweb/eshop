@@ -1,7 +1,7 @@
 ﻿namespace Eshop.Domain
 {
     public class Product
-    {        
+    {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         private Product() { } // private ctor needed for a persistence - Entity Framework
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -37,12 +37,12 @@
 
         private static void ValidateParameters(string title, string description, decimal price)
         {
-            if (string.IsNullOrEmpty(title) || title.Length > 50)
+            if (string.IsNullOrEmpty(title?.Trim()) || title.Length > 50)
             {
                 throw new ArgumentNullException(nameof(title));
             }
 
-            if (string.IsNullOrEmpty(description) || description.Length > 500)
+            if (string.IsNullOrEmpty(description?.Trim()) || description.Length > 500)
             {
                 throw new ArgumentNullException(nameof(description));
             }
